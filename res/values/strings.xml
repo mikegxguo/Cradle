@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, CradleActivity!</string>
+    <string name="app_name">Cradle</string>
+    <string name="attach_tip">Connect: 0</string>
+    <string name="dettach_tip">Disconnect: 0</string>
+    
+</resources>
