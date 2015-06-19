@@ -28,11 +28,17 @@ public class CradleActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case MSG_ATTACH:
-                tipAttach.setText("Attach: " + cntAttach);
+                if (tipAttach != null) {
+                    tipAttach.setText("Attach: " + cntAttach);
+                }
                 break;
             case MSG_DETTACH:
-                tipDettach.setText("Dettach: " + cntDettach);
-                tipBack.setBackgroundColor(Color.RED);
+                if (tipDettach != null) {
+                    tipDettach.setText("Dettach: " + cntDettach);
+                }
+                if (tipBack != null) {
+                    tipBack.setBackgroundColor(Color.RED);
+                }
                 break;
             default:
                 break;
@@ -40,13 +46,13 @@ public class CradleActivity extends Activity {
         }
     };
 
-
     private UEventObserver m_cradleObserver = new UEventObserver() {
         @Override
         public void onUEvent(UEvent event) {
-            boolean bCradle = "cradle".equals(event.get("external")) ? true : false;
-            if(bCradle) {
-                String status = event.get("status");            
+            boolean bCradle = "cradle".equals(event.get("external")) ? true
+                    : false;
+            if (bCradle) {
+                String status = event.get("status");
                 if ("attached".equals(status)) {
                     Log.i(TAG, "Cradle is attached.");
                     cntAttach += 1;
@@ -71,7 +77,7 @@ public class CradleActivity extends Activity {
         cntAttach = 0;
         cntDettach = 0;
 
-        m_cradleObserver.startObserving("SUBSYSTEM=platform");
+        m_cradleObserver.startObserving("SUBSYSTEM=switch");
     }
 
 }
