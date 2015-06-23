@@ -17,26 +17,23 @@ public class CradleActivity extends Activity {
     TextView tipAttach;
     TextView tipDettach;
     LinearLayout tipBack;
-    int cntAttach;
-    int cntDettach;
+    private static int cntAttach = 0;
+    private static int cntDettach = 0;
 
-    private static final int MSG_ATTACH = 0x1245;
-    private static final int MSG_DETTACH = 0x1246;
+    private static final int MSG_REFRESH = 0x1245;
 
     private Handler hRefresh = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-            case MSG_ATTACH:
+            case MSG_REFRESH:
                 if (tipAttach != null) {
                     tipAttach.setText("Attach: " + cntAttach);
                 }
-                break;
-            case MSG_DETTACH:
                 if (tipDettach != null) {
                     tipDettach.setText("Dettach: " + cntDettach);
                 }
-                if (tipBack != null) {
+                if (tipBack != null && cntDettach>0) {
                     tipBack.setBackgroundColor(Color.RED);
                 }
                 break;
@@ -49,19 +46,19 @@ public class CradleActivity extends Activity {
     private UEventObserver m_cradleObserver = new UEventObserver() {
         @Override
         public void onUEvent(UEvent event) {
-            boolean bCradle = "cradle".equals(event.get("external")) ? true
+            Log.d(TAG, "Event: " + event);
+            boolean bCradle = "dock".equals(event.get("SWITCH_NAME")) ? true
                     : false;
             if (bCradle) {
-                String status = event.get("status");
-                if ("attached".equals(status)) {
-                    Log.i(TAG, "Cradle is attached.");
+                String status = event.get("SWITCH_STATE");
+                if ("1".equals(status)) {
+                    Log.d(TAG, "Cradle is attached.");
                     cntAttach += 1;
-                    hRefresh.sendEmptyMessage(MSG_ATTACH);
-                } else if ("dettached".equals(status)) {
-                    Log.i(TAG, "Cradle is dettached.");
+                } else if ("0".equals(status)) {
+                    Log.d(TAG, "Cradle is dettached.");
                     cntDettach += 1;
-                    hRefresh.sendEmptyMessage(MSG_DETTACH);
                 }
+                hRefresh.sendEmptyMessage(MSG_REFRESH);
             }
         }
     };
@@ -74,10 +71,27 @@ public class CradleActivity extends Activity {
         tipAttach = (TextView) findViewById(R.id.attach);
         tipDettach = (TextView) findViewById(R.id.dettach);
         tipBack = (LinearLayout) findViewById(R.id.background);
-        cntAttach = 0;
-        cntDettach = 0;
-
+        Log.d(TAG, "onCreate");
         m_cradleObserver.startObserving("SUBSYSTEM=switch");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+        hRefresh.sendEmptyMessage(MSG_REFRESH);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
+        m_cradleObserver.stopObserving();
+    }
 }

@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/attach_tip"
-        android:textSize="25sp"/>
+        android:textSize="35sp"/>
     
     
     <TextView
@@ -18,6 +18,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/dettach_tip"
-        android:textSize="25sp"/>
+        android:textSize="35sp"/>
     
 </LinearLayout>
