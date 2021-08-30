@@ -9,6 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.os.UEventObserver;
 import android.util.Log;
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
 
 public class CradleActivity extends Activity {
 
@@ -21,6 +24,7 @@ public class CradleActivity extends Activity {
     private static int cntDettach = 0;
 
     private static final int MSG_REFRESH = 0x1245;
+    private final TelephonyManager mTelephonyManager;
 
     private Handler hRefresh = new Handler() {
         @Override
@@ -80,6 +84,12 @@ public class CradleActivity extends Activity {
         super.onResume();
         Log.d(TAG, "onResume");
         hRefresh.sendEmptyMessage(MSG_REFRESH);
+
+        mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        int simSlot = 0; //SIM1
+        mTelephonyManager.getImei(simSlot);
+        Log.d(TAG, "imei 1: "+mTelephonyManager.getImei(simSlot));
+        Log.d(TAG, "imei 2: "+mTelephonyManager.getImei(simSlot+1));
     }
 
     @Override
