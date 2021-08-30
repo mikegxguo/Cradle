@@ -24,7 +24,7 @@ public class CradleActivity extends Activity {
     private static int cntDettach = 0;
 
     private static final int MSG_REFRESH = 0x1245;
-    private final TelephonyManager mTelephonyManager;
+    private TelephonyManager mTelephonyManager;
 
     private Handler hRefresh = new Handler() {
         @Override
@@ -85,7 +85,7 @@ public class CradleActivity extends Activity {
         Log.d(TAG, "onResume");
         hRefresh.sendEmptyMessage(MSG_REFRESH);
 
-        mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         int simSlot = 0; //SIM1
         mTelephonyManager.getImei(simSlot);
         Log.d(TAG, "imei 1: "+mTelephonyManager.getImei(simSlot));
