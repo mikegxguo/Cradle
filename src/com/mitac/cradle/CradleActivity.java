@@ -104,7 +104,8 @@ public class CradleActivity extends Activity {
             return;
         }
         if (DocumentsUtils.checkWritableRootPath(CradleActivity.this, external_sdcard_path)) {
-            showOpenDocumentTree();
+            //showOpenDocumentTree();
+            //return;
         }
         SDThread t = new SDThread(this);
         t.start();
